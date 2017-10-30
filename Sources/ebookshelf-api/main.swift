@@ -3,7 +3,8 @@ import Foundation
 import HeliumLogger
 
 // Define the listening port
-var port = 8080
+let port: Int
+let defaultPort = 8080
 
 // Create a new router
 let router = Router()
@@ -37,6 +38,12 @@ router.get("/wow") {
 	}
 }
 
+if let requestedPort = ProcessInfo.processInfo.environment["PORT"] {
+	port = Int(requestedPort) ?? defaultPort
+}
+else {
+	port = defaultPort
+}
 // Add an HTTP server and connect it to the router
 Kitura.addHTTPServer(onPort: port, with: router)
 
